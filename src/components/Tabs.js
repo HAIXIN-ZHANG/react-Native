@@ -7,7 +7,8 @@ import MapPage from '../screens/MapPage';
 import PlayingPage from '../screens/PlayingPage';
 
 import {colors, sizes} from '../data/theme';
-// import icons from '../data/icons';
+import icons from '../data/icons';
+
 const Tab = createBottomTabNavigator();
 
 function TabIcon({focused, icon}) {
@@ -54,6 +55,9 @@ function tabOptions(icon) {
     tabBarLabelStyle: {
       padding: sizes.padding / 2,
     },
+    style: {
+      backgroundColor: 'white',
+    },
   };
 }
 
@@ -63,14 +67,17 @@ function Tabs({navigation}) {
       <Tab.Screen
         name="MapPage"
         children={() => <MapPage navigation={navigation} />}
+        options={() => tabOptions(icons.tabMapDark)}
       />
       <Tab.Screen
         name="PlayingPage"
         children={() => <PlayingPage navigation={navigation} />}
+        options={() => tabOptions(icons.logoDark)}
       />
       <Tab.Screen
         name="ProfilePage"
         children={() => <ProfilePage navigation={navigation} />}
+        options={() => tabOptions(icons.tabProfileDark)}
       />
     </Tab.Navigator>
   );

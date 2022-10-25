@@ -7,8 +7,10 @@ import {
   Dimensions,
   Button,
   TextInput,
+  Pressable,
 } from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
+import {colors, sizes, fonts} from '../data/theme';
 
 const {width, height} = Dimensions.get('window');
 
@@ -30,15 +32,37 @@ function ProfilePage({navigation}) {
   function Photo(props) {
     if (hasPhoto) {
       return (
-        <View>
+        <View
+          style={{
+            margin: sizes.padding,
+            width: width - 44,
+            height: height / 2,
+            borderStyle: 'dotted',
+            borderWidth: 3,
+            borderColor: colors.purpleColorLighter,
+          }}>
           <Image
             resizeMode="cover"
-            source={{uri: photo?.uri, width, height: height / 2}}
+            source={{
+              uri: photo?.uri,
+              width: width - 51,
+              height: height / 2 - 8,
+            }}
           />
         </View>
       );
     } else {
-      return <View></View>;
+      return (
+        <View
+          style={{
+            margin: sizes.padding,
+            width: width - 44,
+            height: height / 2,
+            borderStyle: 'dotted',
+            borderWidth: 3,
+            borderColor: colors.purpleColorLighter,
+          }}></View>
+      );
     }
   }
 
@@ -49,18 +73,58 @@ function ProfilePage({navigation}) {
       }}>
       <View>
         <View>
-          <Text>Edit Profile</Text>
-          <Text>Mirror, Mirror On The Wall...</Text>
+          <Text
+            style={{
+              ...fonts.body1,
+              padding: sizes.padding,
+              fontWeight: '700',
+              color: colors.purpleColorLighter,
+            }}>
+            Edit Profile
+          </Text>
+          <Text
+            style={{
+              ...fonts.body3,
+              paddingLeft: 22,
+              color: colors.purpleColorLighter,
+            }}>
+            Mirror, Mirror On The Wall...
+          </Text>
         </View>
 
         <Photo />
-        <View>
-          <Button
-            onPress={handleChangePress}
-            title={hasPhoto ? 'Add Photo' : 'Change Photo'}
-          />
-        </View>
-        <View>
+        <Pressable
+          onPress={handleChangePress}
+          style={{
+            width: 100,
+            height: 30,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: colors.purpleColorLighter,
+            borderRadius: 8,
+            position: 'absolute',
+            top: height / 1.8,
+            left: width / 2.7,
+          }}>
+          <Text
+            style={{
+              color: '#ffffff',
+              ...fonts.body4,
+              fontWeight: '600',
+            }}>
+            {!hasPhoto ? 'Add photo' : 'Change Photo'}
+          </Text>
+        </Pressable>
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: colors.purpleColorLighter,
+            borderRadius: 5,
+            marginLeft: 22,
+            marginRight: 22,
+            height: 40,
+          }}>
           <TextInput value={text} onChangeText={handleChangeText} />
         </View>
       </View>
