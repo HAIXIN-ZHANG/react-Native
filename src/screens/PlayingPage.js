@@ -7,15 +7,13 @@ import {
   TextInput,
   Text,
   Pressable,
-  Dimensions,
 } from 'react-native';
 import {colors, sizes, fonts} from '../data/theme';
-import {locations} from '../data/locations';
-import {getDistance} from 'geolib';
-import Geolocation from '@react-native-community/geolocation';
+
 import icons from '../data/icons';
 
-function PlayingPage({navigation}) {
+function PlayingPage(props) {
+  const {navigation, mapState} = props;
   const [webViewState, setWebViewState] = useState({
     loaded: false,
     actioned: false,
@@ -27,10 +25,6 @@ function PlayingPage({navigation}) {
       ...webViewState,
       loaded: true,
     });
-  }
-
-  function handleReloadPress() {
-    webViewRef.current.reload();
   }
 
   function handleActionPress() {
@@ -48,62 +42,7 @@ function PlayingPage({navigation}) {
   function handleChangeText(text) {
     setText(text);
   }
-  // Convert string-based latlong to object-based on each location
-  const updatedLocations = locations.map(location => {
-    const latlong = location.latlong.split(', ');
-    location.coordinates = {
-      latitude: parseFloat(latlong[0]),
-      longitude: parseFloat(latlong[1]),
-    };
-    return location;
-  });
 
-  // Setup state for map data
-  const initialMapState = {
-    locationPermission: true,
-    locations: updatedLocations,
-    userLocation: {
-      latitude: -27.499526188402154,
-      longitude: 152.9728129460468,
-      // Starts at "Indooroopilly Shopping Centre"
-    },
-    nearbyLocation: {},
-  };
-
-  const [mapState, setMapState] = useState(initialMapState);
-  function calculateDistance(userLocation) {
-    const nearestLocations = mapState.locations
-      .map(location => {
-        const metres = getDistance(userLocation, location.coordinates);
-        location['distance'] = {
-          metres: metres,
-          nearby: metres <= 100 ? true : false,
-        };
-        return location;
-      })
-      .sort((previousLocation, thisLocation) => {
-        return previousLocation.distance.metres - thisLocation.distance.metres;
-      });
-    return nearestLocations.shift();
-  }
-  if (mapState.locationPermission) {
-    Geolocation.watchPosition(
-      position => {
-        const userLocation = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        };
-        const nearbyLocation = calculateDistance(userLocation);
-        setMapState({
-          ...mapState,
-          userLocation,
-          nearbyLocation: nearbyLocation,
-        });
-      },
-      error => console.log(error),
-    );
-  }
-  function handleChangePress() {}
   function HasMusic() {
     if (!mapState.nearbyLocation?.distance?.nearby) {
       return (

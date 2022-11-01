@@ -1,31 +1,21 @@
-import React, {useState} from 'react';
-import {SafeAreaView, Text, View} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {SafeAreaView} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
-
+import {fetchAllLocations} from './src/utils/fetch';
 import Tabs from './src/components/Tabs';
-
-// import Tabs from './components/Tabs';
-// import Recipe from './screens/Recipe';
-
-// // import {colors} from './data/theme';
-// import initialRecipes from './data/recipes';
 
 const Stack = createStackNavigator();
 
 function App() {
-  const [recipes, setRecipes] = useState();
-
-  const sortRecipes = (recipe, otherRecipe) => {
-    if (recipe.name < otherRecipe.name) {
-      return -1;
-    }
-    if (recipe.name > otherRecipe.name) {
-      return 1;
-    }
-    return 0;
-  };
-  // const sortedRecipes = recipes.sort(sortRecipes);
+  const [locations, setLocations] = useState();
+  useEffect(() => {
+    const fetch = async () => {
+      const result = await fetchAllLocations();
+      setLocations(result?.locations);
+    };
+    fetch();
+  }, [locations?.length]);
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -35,7 +25,10 @@ function App() {
             headerShown: false,
           }}
           initialRouteName={'Tabs'}>
-          <Stack.Screen name="Tabs" children={props => <Tabs {...props} />} />
+          <Stack.Screen
+            name="Tabs"
+            children={props => <Tabs {...props} locations={locations} />}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

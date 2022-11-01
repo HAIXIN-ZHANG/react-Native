@@ -5,7 +5,6 @@ import {
   Image,
   Text,
   Dimensions,
-  Button,
   TextInput,
   Pressable,
 } from 'react-native';

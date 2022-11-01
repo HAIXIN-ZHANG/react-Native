@@ -2,13 +2,15 @@ import React from 'react';
 import {SafeAreaView} from 'react-native';
 import ShowMap from '../components/ShowMap';
 
-function Map({navigation}) {
+function Map(props) {
+  const {mapState} = props;
+
   return (
     <SafeAreaView
       style={{
         flex: 1,
       }}>
-      <ShowMap />
+      <ShowMap mapState={mapState} />
     </SafeAreaView>
   );
 }
